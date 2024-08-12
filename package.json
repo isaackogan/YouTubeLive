@@ -1,0 +1,64 @@
+{
+  "name": "youtubelive",
+  "version": "0.0.1",
+  "description": "YouTube Live Auth-less Scraping",
+  "main": "./dist/index.js",
+  "scripts": {
+    "build:all": "tsc && typedoc",
+    "build": "tsc",
+    "build:docs": "typedoc",
+    "build:tsc": "tsc",
+    "start": "tsc && node dist/index.js",
+    "prepare": "npm run build-ts",
+    "build-ts": "tsc",
+    "test:login": "npm run build && node test/login.mjs",
+    "test:user": "npm run build && node test/user.mjs",
+    "test:sample": "npm run build && node test/sample.mjs"
+  },
+  "files": [
+    "dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/isaackogan/YouTubeLive.git"
+  },
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org/"
+  },
+  "keywords": [
+    "youtube-scraper",
+    "youtube-downloader",
+    "youtube-saver",
+    "yt-scraper",
+    "youtube",
+    "yt-scraper",
+    "yt-api",
+    "youtube-private-api",
+    "youtube-api",
+    "youtube-scraping"
+  ],
+  "author": "Isaac Kogan <info@isaackogan.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/isaackogan/YouTubeLive/issues"
+  },
+  "homepage": "https://github.com/isaackogan/YouTubeLive",
+  "dependencies": {
+    "@types/tough-cookie": "^4.0.5",
+    "axios": "^1.7.2",
+    "axios-cookiejar-support": "^5.0.2",
+    "http-cookie-agent": "^6.0.5",
+    "http-proxy-agent": "^7.0.2",
+    "https-proxy-agent": "^7.0.5",
+    "insta-fetcher": "^1.3.35",
+    "tough-cookie": "^4.1.4",
+    "undici": "^6.19.2"
+  },
+  "devDependencies": {
+    "tsx": "^4.16.2",
+    "@types/node": "^20.14.10",
+    "dotenv": "^16.4.5",
+    "typedoc": "^0.26.4",
+    "typescript": "^5.5.3"
+  }
+}
