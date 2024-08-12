@@ -43,7 +43,9 @@ export class YouTubeLiveClient extends EventEmitter {
    * Start a connection to a live stream
    *
    */
-  public async start() {
+  public async start(
+      excludeFirstFetchData: boolean = true
+  ) {
 
     // Now we fetch the room info
     const continuationResponse: LivePageRouteResponse = await this.web.continuation_route.fetch(
@@ -56,8 +58,8 @@ export class YouTubeLiveClient extends EventEmitter {
     );
 
     try {
-      await this.fetchComments();
-      this.commentInterval = setInterval(this.fetchComments.bind(this), 5000);
+      await this.fetchComments(excludeFirstFetchData);
+      this.commentInterval = setInterval(this.fetchComments.bind(this), 5000) as unknown as NodeJS.Timeout;
     } catch (ex) {
       this.emit(LiveEvent.CONNECT_ERROR, ex);
       throw ex;
@@ -78,7 +80,7 @@ export class YouTubeLiveClient extends EventEmitter {
 
   }
 
-  protected async fetchComments(): Promise<void> {
+  protected async fetchComments(excludeFirstFetchData: boolean): Promise<void> {
     let commentsResponse: LiveChatRouteResponse;
 
     if (this.deviceContext === undefined) {
@@ -104,18 +106,20 @@ export class YouTubeLiveClient extends EventEmitter {
     // Raw payload emit
     this.emit(LiveEvent.FETCH_COMMENTS, commentsResponse);
 
+    // If we're excluding the first fetch data, we don't want to emit the comments
+    if (excludeFirstFetchData) return;
+
     // First, parse comments
     for (let action of commentsResponse?.continuationContents?.liveChatContinuation.actions || []) {
 
-      if (action.addChatItemAction) {
-        const item = action.addChatItemAction.item?.liveChatTextMessageRenderer;
-        this.emit(LiveEvent.COMMENT, item);
+      if (action.addChatItemAction && action.addChatItemAction.item?.liveChatTextMessageRenderer) {
+        this.emit(LiveEvent.COMMENT, action.addChatItemAction.item?.liveChatTextMessageRenderer);
       }
     }
 
     // Second, parse emojis
     for (let mutation of commentsResponse?.frameworkUpdates?.entityBatchUpdate.mutations || []) {
-      if (mutation.payload.emojiFountainDataEntity.reactionBuckets) {
+      if (mutation.payload?.emojiFountainDataEntity?.reactionBuckets) {
         this.emit(LiveEvent.EMOJI, mutation.payload.emojiFountainDataEntity.reactionBuckets);
       }
     }
