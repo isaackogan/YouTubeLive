@@ -4,5 +4,6 @@ export enum LiveEvent {
   DISCONNECTED = "disconnected",
   FETCH_COMMENTS = "fetch_comments",
   COMMENT = "comment",
-  EMOJI = "emoji"
+  EMOJI = "emoji",
+  CONNECT_ERROR = "connect_error"
 }

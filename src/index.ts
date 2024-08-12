@@ -55,8 +55,13 @@ export class YouTubeLiveClient extends EventEmitter {
         continuationResponse.visitorDataToken
     );
 
-    // Start the heartbeat update
-    this.commentInterval = setInterval(this.fetchComments.bind(this), 5000);
+    try {
+      await this.fetchComments();
+      this.commentInterval = setInterval(this.fetchComments.bind(this), 5000);
+    } catch (ex) {
+      this.emit(LiveEvent.CONNECT_ERROR, ex);
+      throw ex;
+    }
 
   }
 
