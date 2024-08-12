@@ -55,9 +55,9 @@ export type LiveChatRouteResponse = {
           emojiFountainDataEntity: {
             key: string,
             reactionBuckets: {
-              duration: {seconds: string},
+              duration: { seconds: string },
               intensityScore: number,
-              reactionsData: {unicodeEmojiId: string, reactionCount: number}[],
+              reactionsData: { unicodeEmojiId: string, reactionCount: number }[],
               totalReactions: number
             }[]
           }
@@ -69,7 +69,7 @@ export type LiveChatRouteResponse = {
 
 
 export interface ChatMessage {
-  runs?: Run[];
+  message: { runs?: Run[] }
   authorName?: SimpleText;
   authorPhoto?: AuthorPhoto;
   contextMenuEndpoint?: ContextMenuEndpoint;
